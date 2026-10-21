@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>Carib Code</title>
+    <meta name="theme-color" content="#1b1a19" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Carib Code" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/carib-code-logo.svg" />
+    <link rel="stylesheet" href="/admin/assets/__FCC_VERSION__/session_layout.css?v=20261020_05" />
+    <link rel="stylesheet" href="/admin/assets/__FCC_VERSION__/code_sessions.css?v=20261020_05" />
+    <link rel="stylesheet" href="/admin/assets/__FCC_VERSION__/claude_suite.css?v=20261020_08" />
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').catch(function() {});
+        });
+      }
+      if (window.location.username || window.location.password) {
+        try {
+          const cleanUrl = window.location.origin + window.location.pathname + window.location.search + window.location.hash;
+          window.history.replaceState({}, document.title, cleanUrl);
+        } catch (_) {}
+      }
+      if (window.location.hostname.startsWith('platform.') || window.location.hostname.includes('platform') || window.location.pathname === '/dashboard' || window.location.hash.startsWith('#/dashboard') || window.location.hash.startsWith('#platform')) {
+        document.documentElement.classList.add('console-mode-init');
+      }
+    </script>
+  </head>
+  <body class="dark-mode">
+    <div class="app-shell">
+      
+      <aside class="sidebar" id="appSidebar">
+        
+        <div class="sidebar-brand-row">
+          <div class="sidebar-brand-left">
+            <button id="btnSidebarCollapse" class="sidebar-toggle-icon-btn" onclick="window.toggleSidebarCollapse()" title="Toggle Sidebar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="9" y1="3" x2="9" y2="21"></line>
+              </svg>
+            </button>
+            <span class="sidebar-brand-title">Carib Code</span>
+          </div>
+          <div class="sidebar-view-pill-switcher" id="sidebarViewSwitcher" role="group" aria-label="View Switcher">
+            <button id="btnViewChat" class="view-pill-btn active" onclick="window.navigateToView('new')" title="Chat view" aria-label="Chat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                <line x1="15" y1="3" x2="15" y2="21"></line>
+              </svg>
+            </button>
+            <button id="btnViewCode" class="view-pill-btn" onclick="window.navigateToView('code')" title="Code view (Sessions &amp; Workspace)" aria-label="Code">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-search-container">
+          <div class="sidebar-search-field">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="sidebarSearchInput" placeholder="Search" oninput="window.filterRecents(this.value)" autocomplete="off" spellcheck="false" />
+          </div>
+        </div>
+
+        <div class="sidebar-top-section">
+          <button class="sidebar-nav-item active" id="btnSidebarNew" onclick="window.navigateToView('new')" title="Start New Chat (⌘N)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>New</span>
+          </button>
+        </div>
+
+        <nav class="sidebar-nav-list" aria-label="Main Navigation">
+          <button class="sidebar-nav-item" data-view="projects" onclick="window.navigateToView('projects')" title="Projects &amp; Workspaces">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
+            </svg>
+            <span style="flex:1;">Projects</span>
+            <span class="nav-badge-new">New</span>
+          </button>
+
+          <button class="sidebar-nav-item" data-view="artifacts" onclick="window.navigateToView('artifacts')" title="Artifacts Studio">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+            </svg>
+            <span>Artifacts</span>
+          </button>
+
+          <button class="sidebar-nav-item" data-view="scheduled" onclick="window.navigateToView('scheduled')" title="Scheduled Tasks &amp; Automations">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Scheduled</span>
+          </button>
+
+          <button class="sidebar-nav-item" data-view="customize" onclick="window.navigateToView('customize')" title="Customize: Skills, Connectors, Plugins">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="21" x2="4" y2="14"></line>
+              <line x1="4" y1="10" x2="4" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12" y2="3"></line>
+              <line x1="20" y1="21" x2="20" y2="16"></line>
+              <line x1="20" y1="12" x2="20" y2="3"></line>
+              <line x1="1" y1="14" x2="7" y2="14"></line>
+              <line x1="9" y1="8" x2="15" y2="8"></line>
+              <line x1="17" y1="16" x2="23" y2="16"></line>
+            </svg>
+            <span>Customize</span>
+          </button>
+
+          <button class="sidebar-nav-item" id="btnSidebarMore" onclick="window.toggleSidebarMore && window.toggleSidebarMore()" title="More">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <span>More</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-pinned-section">
+          <div class="pinned-section-header">
+            <span>Pinned</span>
+          </div>
+          <div class="pinned-projects-list">
+            <button class="pinned-project-item" id="pinnedProjectC9" data-project-id="01a1549c-215c-7089-a469-d874fcfc8454" onclick="window.openProject('01a1549c-215c-7089-a469-d874fcfc8454')" title="Carib C9 CRM & Vtiger V9 Modernization">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>
+              <span>Carib C9 CRM &amp; Vtiger V9 Moderni...</span>
+            </button>
+            <button class="pinned-project-item" id="pinnedProjectJarvis" data-project-id="01a1549b-ff8c-772c-a993-7a0baded63a0" onclick="window.openProject('01a1549b-ff8c-772c-a993-7a0baded63a0')" title="Jarvis OS Orchestrator">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>
+              <span>Jarvis OS Orchestrator</span>
+            </button>
+            <button class="pinned-project-item" id="pinnedProjectPlayerSuite" data-project-id="01a1549b-de0a-771d-91d7-05864ae8da00" onclick="window.openProject('01a1549b-de0a-771d-91d7-05864ae8da00')" title="Carib Live Player Suite">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>
+              <span>Carib Live Player Suite</span>
+            </button>
+            <button class="pinned-project-item" id="pinnedProjectLiveResults" data-project-id="01a1548f-e2a7-722b-b488-4a544c6607ca" onclick="window.openProject('01a1548f-e2a7-722b-b488-4a544c6607ca')" title="Carib Live Results Track Dashboard">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>
+              <span>Carib Live Results Track Dashboard</span>
+            </button>
+            <div class="pinned-project-group expanded" id="pinnedGroupCoreApps">
+              <button class="pinned-project-item" id="pinnedProjectCoreApps" data-project-id="01a15485-b366-716e-a96a-97b6701f062b" onclick="window.openProject('01a15485-b366-716e-a96a-97b6701f062b')" title="Carib Core Applications Unified Workspace">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>
+                <span>Carib Core Applications Unified W...</span>
+              </button>
+              <div class="pinned-nested-tree">
+                <button class="pinned-nested-item" onclick="window.sendPrompt('Analyze Cross-pillar project architecture and cross-service telemetry.')" title="Cross-pilla project">
+                  <span>Cross-pilla project</span>
+                  <svg class="nested-doc-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                </button>
+                <button class="pinned-nested-item" onclick="window.sendPrompt('Show cybernetic status dashboard architecture and real-time telemetry.')" title="Cybernetic status dashboard and real-time telemetry">
+                  <span>Cybernetic status dashboard ar...</span>
+                  <svg class="nested-doc-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                </button>
+                <button class="pinned-nested-item" onclick="window.sendPrompt('Summarize Carib Core Applications six pillars and active engineering sprint.')" title="Carib Core Applications pillars">
+                  <span>Carib Core Applications pillars</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-recents-section">
+          <div class="recents-section-header">
+            <span>Recents</span>
+            <div class="recents-header-icons">
+              <button class="recents-header-btn" title="Sort recents" onclick="window.sortRecents()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="4" y1="6" x2="20" y2="6"></line>
+                  <line x1="7" y1="12" x2="17" y2="12"></line>
+                  <line x1="10" y1="18" x2="14" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="recents-curated-list">
+            <button class="recent-chat-item" onclick="window.sendPrompt && window.sendPrompt('Analyze person\'s age estimation logic and algorithms.')" title="Person's age">
+              <span class="recent-title">Person's age</span>
+            </button>
+            <button class="recent-chat-item" onclick="window.sendPrompt && window.sendPrompt('Building OTT platform service architecture.')" title="Building OTT platform service">
+              <span class="recent-title">Building OTT platform service</span>
+            </button>
+          </div>
+          <div id="chatHistoryList" class="chat-history-list">
+            <!-- Dynamically populated from /api/chat/conversations -->
+          </div>
+        </div>
+
+        <!-- User Profile Card: Carib Admin · Pro with Avatar ★ -->
+        <div id="userProfileCard" class="user-profile-card">
+          <div class="user-profile-info">
+            <div id="userAvatar" class="user-avatar-circle" style="background:linear-gradient(135deg, #d97757, #b45309);color:#fff;">★</div>
+            <div class="user-name-text">
+              <span id="userName">Carib Admin · Pro</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          <div class="user-dock-icon" title="Workspace Dock (⊞)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </div>
+        </div>
+
+        <!-- User Menu Popover -->
+        <div id="userMenuPopover" class="user-menu-popover">
+          <div class="user-menu-header">
+            <div class="user-menu-title" style="font-size:13px;font-weight:500;color:var(--carib-text-primary,#ececec);">admin@caribgroupofcompanies.ltd</div>
+          </div>
+          <!-- Workspace Account Switcher: Free vs Pro -->
+          <div id="userMenuWorkspaceSection" class="user-menu-workspace-section" style="padding:6px 10px 8px;margin-bottom:4px;border-bottom:1px solid var(--carib-border, rgba(255,255,255,0.08));">
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--carib-text-secondary,#6b7280);letter-spacing:0.04em;margin-bottom:6px;">Workspace</div>
+            <div id="accountSwitchPro" class="user-menu-account-item active" onclick="window.switchCaribPlan('pro')" style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:8px;cursor:pointer;margin-bottom:4px;transition:background 0.15s ease;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg, #d97757, #b45309);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">★</div>
+                <div style="display:flex;flex-direction:column;">
+                  <span style="font-size:13px;font-weight:600;color:var(--carib-coral,#d97757);">Carib Admin · Pro</span>
+                  <span style="font-size:11px;color:var(--carib-text-secondary,#6b7280);">Carib Code Deep &amp; DeepSeek R1</span>
+                </div>
+              </div>
+              <span id="accountCheckPro" class="account-check-icon" style="color:var(--carib-coral,#d97757);display:inline-flex;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+            </div>
+            <div id="accountSwitchFree" class="user-menu-account-item" onclick="window.switchCaribPlan('free')" style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:8px;cursor:pointer;transition:background 0.15s ease;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:22px;height:22px;border-radius:50%;background:#4b5563;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;">C</div>
+                <div style="display:flex;flex-direction:column;">
+                  <span style="font-size:13px;font-weight:500;">Carib Admin · Free</span>
+                  <span style="font-size:11px;color:var(--carib-text-secondary,#6b7280);">Multi-Model Auto ($0.00)</span>
+                </div>
+              </div>
+              <span id="accountCheckFree" class="account-check-icon" style="color:var(--carib-coral,#d97757);display:none;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+            </div>
+          </div>
+          <div class="user-menu-item" onclick="window.navigateToView('settings')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span style="flex:1;">Settings</span>
+            <kbd style="font-size:11px;opacity:0.5;font-family:sans-serif;">⌘,</kbd>
+          </div>
+          <div class="user-menu-item" id="userMenuThemeToggleBtn" onclick="window.toggleCaribTheme()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <span style="flex:1;">Theme</span>
+            <span id="userMenuThemeBadge" style="font-size:11.5px; opacity:0.65; background:var(--carib-pill-bg); padding:2px 8px; border-radius:10px;">Toggle</span>
+          </div>
+          <div class="user-menu-item" onclick="alert('Language: English (US)')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span>Language</span>
+          </div>
+          <div class="user-menu-item" onclick="window.navigateToView('docs')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <span>Get help</span>
+          </div>
+          <div class="user-menu-divider"></div>
+          <div class="user-menu-item" onclick="window.openPlansModal()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>Sovereign Free Plans ($0.00)</span>
+          </div>
+          <div class="user-menu-item" onclick="window.navigateToView('downloads')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Get apps and extensions</span>
+          </div>
+          <div class="user-menu-item" onclick="window.open('https://platform.caribcode.caribgroupofcompanies.ltd/', '_blank')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <span>Developer platform</span>
+          </div>
+          <div class="user-menu-item" onclick="window.navigateToView('docs')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <span>Documentation & Release Notes</span>
+          </div>
+          <div class="user-menu-divider"></div>
+          <div class="user-menu-item" onclick="window.location.href='/logout?involuntary=1&returnTo=%2Flogin%3Ffrom%3Dlogout%26reauth%3D1%26returnTo%3D%252Fnew'" style="color:#ef4444;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <span>Log out</span>
+          </div>
+        </div>
+      </aside>
+      <div id="mobileSidebarBackdrop" class="mobile-sidebar-backdrop" onclick="window.toggleMobileSidebar(event)"></div>
+
+      <!-- Main Application Surface -->
+      <main class="main">
+        
+        <header class="topbar">
+          <div class="claude-topbar-wrapper">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <button id="btnMobileSidebarToggle" class="sidebar-toggle-btn" aria-label="Toggle Navigation Sidebar" onclick="window.toggleMobileSidebar(event)" type="button" title="Toggle Sidebar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="9" y1="3" x2="9" y2="21"></line>
+                </svg>
+              </button>
+              <div id="topbarChatTitleContainer" class="topbar-chat-title-container" style="display:none;align-items:center;gap:6px;font-size:13.5px;font-weight:500;color:var(--carib-text-primary,#ececec);cursor:pointer;">
+                <span id="topbarChatTitleText">Chat</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.6;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:center;">
+              <div class="claude-top-pill" id="topbarUpgradePill" style="display:none;">
+                <span>Free plan</span>
+                <span style="opacity:0.4;">·</span>
+                <a href="#/upgrade" onclick="event.preventDefault();window.openPlansModal && window.openPlansModal();">Upgrade</a>
+              </div>
+            </div>
+
+            <div class="topbar-right-icons" style="display:flex;align-items:center;gap:8px;">
+              <button id="btnTopbarNewChat" class="btn-ghost-icon" title="Start new chat (⌘K)" onclick="window.navigateToView('new')" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;border:1px solid var(--carib-border,rgba(0,0,0,0.08));background:transparent;color:var(--carib-text-secondary,#6b7280);cursor:pointer;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
+              <button id="btnTopbarMascot" class="topbar-mascot-btn" title="Account &amp; Preferences" aria-label="Account" onclick="window.toggleUserMenu(event)">
+                <span style="font-size:16px;line-height:1;">🪶</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- User App Views (Strictly isolated from admin views) -->
+        <div id="userAppViews" class="user-app-views">
+          <section id="view-new" class="user-view active" data-view="new"></section>
+          <section id="view-projects" class="user-view" data-view="projects" hidden></section>
+          <section id="view-artifacts" class="user-view" data-view="artifacts" hidden></section>
+          <section id="view-scheduled" class="user-view" data-view="scheduled" hidden></section>
+          <section id="view-customize" class="user-view" data-view="customize" hidden></section>
+          <section id="view-code" class="user-view" data-view="code" hidden>
+            <div id="codeRoot"></div>
+          </section>
+          <section id="view-docs" class="user-view" data-view="docs" hidden></section>
+          <section id="view-settings" class="user-view" data-view="settings" hidden></section>
+          <section id="view-platform" class="user-view" data-view="platform" hidden></section>
+          <section id="view-downloads" class="user-view" data-view="downloads" hidden></section>
+        </div>
+      </main>
+    </div>
+
+    
+    <div id="consoleShell" class="console-shell" style="display:none;"></div>
+
+    <!-- Modals -->
+    <dialog id="downloadsDialog" class="claude-modal downloads-modal" aria-labelledby="downloadsDialogTitle">
+      <div class="claude-modal-card">
+        <div class="claude-modal-header">
+          <div>
+            <div class="claude-modal-badge">Carib Group Ecosystem</div>
+            <h3 id="downloadsDialogTitle" class="claude-modal-title">Carib Code across all your devices</h3>
+            <p class="claude-modal-subtitle">Experience seamless intelligence on desktop, terminal, and mobile—fully bridged to your Sovereign Free models.</p>
+          </div>
+          <button class="claude-modal-close" type="button" onclick="window.closeDownloadsModal()" aria-label="Close dialog">&#x2715;</button>
+        </div>
+        <div class="claude-modal-body">
+          <div class="downloads-grid">
+            <!-- Mac Card -->
+            <div class="download-card featured-download">
+              <div class="download-card-badge">Installed & Running on this MacBook</div>
+              <div class="download-card-header">
+                <div class="download-icon mac-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.77 1.06-1.84.94-2.91-1 .04-2.17.65-2.82 1.41-.57.66-.99 1.74-.86 2.78 1.12.09 2.11-.51 2.74-1.28z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="download-app-name">Carib Code for Mac</h4>
+                  <span class="download-app-meta">macOS 13+ · Universal (Apple Silicon & Intel)</span>
+                </div>
+              </div>
+              <p class="download-app-desc">Spotlight quick-launch (⌥ Space), floating Artifacts, local Cowork directory, and active Sovereign MCP bridge.</p>
+              <div class="download-status-pill">
+                <span class="pulse-dot"></span>
+                <span>Carib Code Desktop (coming soon)</span>
+              </div>
+              <div class="download-card-actions">
+                <a href="#" aria-disabled="true" title="Coming soon" onclick="return false" target="_blank" class="download-btn-primary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <span>Download .dmg</span>
+                </a>
+                <button class="download-btn-secondary" onclick="window.copyCliCommand('open -a 'Carib Code'', this)">
+                  <span>Launch Local App</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Windows Card -->
+            <div class="download-card">
+              <div class="download-card-header">
+                <div class="download-icon win-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.951-1.801"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="download-app-name">Carib Code for Windows</h4>
+                  <span class="download-app-meta">Windows 10 & 11 · x64 & ARM64</span>
+                </div>
+              </div>
+              <p class="download-app-desc">Global hotkey (Alt Space), Windows tray presence, native notifications, and Windows Cowork file support.</p>
+              <div class="download-card-actions">
+                <a href="#" aria-disabled="true" title="Coming soon" onclick="return false" target="_blank" class="download-btn-primary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <span>Download .exe</span>
+                </a>
+              </div>
+            </div>
+
+            
+            <div class="download-card full-width-card">
+              <div class="download-card-header">
+                <div class="download-icon cli-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="4 17 10 11 4 5"></polyline>
+                    <line x1="12" y1="19" x2="20" y2="19"></line>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="download-app-name">Carib Code CLI (Terminal Development Suite)</h4>
+                  <span class="download-app-meta">macOS, Linux, Windows WSL · Agentic Autonomous Coding</span>
+                </div>
+              </div>
+              <p class="download-app-desc">Carib Group's terminal agent that understands your entire repository, writes code, fixes bugs, and runs tests. Connect it directly to your Carib Code Sovereign Proxy to enjoy 100% free multi-model routing.</p>
+              
+              <div class="cli-command-group">
+                <div class="cli-step-label">1. Install Carib Code CLI:</div>
+                <div class="code-snippet-box">
+                  <code>curl -fsSL https://caribcode.caribgroupofcompanies.ltd/install.sh | bash</code>
+                  <button class="copy-snippet-btn" onclick="window.copyCliCommand('curl -fsSL https://caribcode.caribgroupofcompanies.ltd/install.sh | bash', this)">Copy</button>
+                </div>
+                
+                <div class="cli-step-label">2. Route to Carib Code Free Sovereign Proxy:</div>
+                <div class="code-snippet-box">
+                  <code>export CARIB_CODE_API="https://caribcode.caribgroupofcompanies.ltd/api"</code>
+                  <button class="copy-snippet-btn" onclick="window.copyCliCommand('export CARIB_CODE_API=&quot;https://caribcode.caribgroupofcompanies.ltd/api&quot;', this)">Copy</button>
+                </div>
+
+                <div class="cli-step-label">3. Launch Carib Code in your terminal:</div>
+                <div class="code-snippet-box">
+                  <code>carib-code</code>
+                  <button class="copy-snippet-btn" onclick="window.copyCliCommand('carib-code', this)">Copy</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mobile Card (iOS & Android) -->
+            <div class="download-card full-width-card">
+              <div class="download-card-header">
+                <div class="download-icon mobile-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="download-app-name">Carib Code Mobile (iOS, iPadOS & Android)</h4>
+                  <span class="download-app-meta">iPhone, iPad & Android Smartphones / Tablets</span>
+                </div>
+              </div>
+              <p class="download-app-desc">Capture images, transcribe voice dictation in real time, analyze PDFs, and access all your chats seamlessly across devices.</p>
+              <div class="download-mobile-badges">
+                <a href="#" aria-disabled="true" title="Coming soon" onclick="return false" target="_blank" class="mobile-store-badge">
+                  <span>Download on Apple App Store</span>
+                </a>
+                <a href="#" aria-disabled="true" title="Coming soon" onclick="return false" target="_blank" class="mobile-store-badge">
+                  <span>Get it on Google Play</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+    <dialog id="plansDialog" class="claude-modal plans-modal" aria-labelledby="plansDialogTitle">
+      <div class="claude-modal-card">
+        <div class="claude-modal-header">
+          <div>
+            <div class="claude-modal-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--carib-green); border-color: rgba(16, 185, 129, 0.3);">100% Free Sovereign Architecture · All Tiers Unlocked</div>
+            <h3 id="plansDialogTitle" class="claude-modal-title">All Sovereign Tiers Free Forever</h3>
+            <p class="claude-modal-subtitle">Every tier, multi-model engine, and enterprise capability in Carib Code is 100% unlocked at $0.00 cost. Zero subscriptions, zero per-seat fees, and zero token bills across all workspaces.</p>
+          </div>
+          <button class="claude-modal-close" type="button" onclick="window.closePlansModal()" aria-label="Close dialog">&#x2715;</button>
+        </div>
+
+        <div class="billing-switcher-container">
+          <div class="billing-switcher">
+            <button class="billing-toggle-btn active" id="btnBillingYearly" onclick="window.toggleBillingCycle('yearly')">
+              <span>Annual ($0.00 / yr)</span>
+              <span class="save-tag" style="background: rgba(16, 185, 129, 0.2); color: var(--carib-green);">100% Free</span>
+            </button>
+            <button class="billing-toggle-btn" id="btnBillingMonthly" onclick="window.toggleBillingCycle('monthly')">Monthly ($0.00 / mo)</button>
+          </div>
+        </div>
+
+        <div class="claude-modal-body">
+          <div class="plans-grid">
+            <!-- Free Developer Seat -->
+            <div class="plan-card">
+              <span class="plan-user-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--carib-green);">Free Developer · Active</span>
+              <div class="plan-tier-name">Free Developer</div>
+              <div class="plan-price-block">
+                <span class="plan-price" id="standardPriceLabel">$0.00</span>
+                <span class="plan-period" id="standardPeriodLabel">/ forever</span>
+              </div>
+              <span class="plan-sub-price" id="standardSubLabel" style="color: var(--carib-green); font-weight: 600;">100% Free · $0.00 bill</span>
+              <p class="plan-desc">Unlimited developer workflows. Carib Code CLI, Carib Cowork, full multi-model routing, and local connectors.</p>
+              <button class="plan-action-btn secondary" onclick="window.closePlansModal()" style="border-color: rgba(16, 185, 129, 0.4); color: var(--carib-green);">✓ Active Free Tier</button>
+              <ul class="plan-feature-list">
+                <li><span class="check-icon sovereign-check">✓</span> Full Carib Code & Carib Code CLI</li>
+                <li><span class="check-icon sovereign-check">✓</span> Gemini 2.5/3.8 Flash, DeepSeek R1 671B Free</li>
+                <li><span class="check-icon sovereign-check">✓</span> Remote & local MCP connectors</li>
+                <li><span class="check-icon sovereign-check">✓</span> Zero data retention & zero model training</li>
+                <li><span class="check-icon sovereign-check">✓</span> Artifacts viewer & visual studio</li>
+                <li><span class="check-icon sovereign-check">✓</span> 100% Free ($0.00 forever)</li>
+              </ul>
+            </div>
+
+            <!-- Free Team & Workspaces -->
+            <div class="plan-card" style="border-color: rgba(217, 119, 87, 0.4);">
+              <span class="plan-user-badge" style="background: rgba(217, 119, 87, 0.15); color: var(--carib-coral);">Free Team · Active</span>
+              <div class="plan-tier-name" style="color: var(--carib-coral);">Free Team</div>
+              <div class="plan-price-block">
+                <span class="plan-price plan-price-pro" id="premiumPriceLabel" style="color: var(--carib-coral);">$0.00</span>
+                <span class="plan-period" id="premiumPeriodLabel">/ forever</span>
+              </div>
+              <span class="plan-sub-price" id="premiumSubLabel" style="color: var(--carib-green); font-weight: 600;">100% Free · $0.00 bill</span>
+              <p class="plan-desc">Full team collaboration with shared projects, custom instructions, and sovereign isolation.</p>
+              <button class="plan-action-btn secondary" onclick="window.closePlansModal()" style="border-color: var(--carib-coral); color: var(--carib-coral);">✓ Active Free Tier</button>
+              <ul class="plan-feature-list">
+                <li><span class="check-icon sovereign-check">✓</span> Unlimited team members & workspaces</li>
+                <li><span class="check-icon sovereign-check">✓</span> Shared sovereign projects & knowledge docs</li>
+                <li><span class="check-icon sovereign-check">✓</span> Carib Design & Carib Science tools</li>
+                <li><span class="check-icon sovereign-check">✓</span> Admin controls for all 1,174 connectors</li>
+                <li><span class="check-icon sovereign-check">✓</span> High-concurrency multi-model routing</li>
+                <li><span class="check-icon sovereign-check">✓</span> 100% Free ($0.00 forever)</li>
+              </ul>
+            </div>
+
+            <!-- Free Sovereign Enterprise -->
+            <div class="plan-card">
+              <span class="plan-user-badge" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">Free Enterprise · Active</span>
+              <div class="plan-tier-name">Free Enterprise</div>
+              <div class="plan-price-block">
+                <span class="plan-price plan-price-team" id="enterprisePriceLabel" style="color: #3b82f6;">$0.00</span>
+                <span class="plan-period" id="enterprisePeriodLabel">/ forever</span>
+              </div>
+              <span class="plan-sub-price" style="color: var(--carib-green); font-weight: 600;">100% Free · $0.00 bill</span>
+              <p class="plan-desc">Enterprise governance with SCIM, Workload Identity Federation, audit logs, and zero cost.</p>
+              <button class="plan-action-btn secondary" onclick="window.closePlansModal()" style="border-color: rgba(59, 130, 246, 0.4); color: #3b82f6;">✓ Active Free Tier</button>
+              <ul class="plan-feature-list">
+                <li><span class="check-icon sovereign-check">✓</span> Everything in Team included</li>
+                <li><span class="check-icon sovereign-check">✓</span> Workload Identity Federation (WIF) OIDC</li>
+                <li><span class="check-icon sovereign-check">✓</span> Fine-grained RBAC and audit telemetry</li>
+                <li><span class="check-icon sovereign-check">✓</span> Chief of Staff 100-Staff Autonomous Swarm</li>
+                <li><span class="check-icon sovereign-check">✓</span> Carib Live Results FAT timing engine</li>
+                <li><span class="check-icon sovereign-check">✓</span> 100% Free ($0.00 forever)</li>
+              </ul>
+            </div>
+
+            <!-- Carib Code Sovereign Tier (Active) -->
+            <div class="plan-card sovereign-active-card">
+              <div class="active-sovereign-ribbon">ACTIVE PLAN · 100% FREE</div>
+              <span class="plan-user-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--carib-green);">Unlimited Seats</span>
+              <div class="plan-tier-name sovereign-name">Carib Code Sovereign</div>
+              <div class="plan-price-block">
+                <span class="plan-price sovereign-price">$0.00</span>
+                <span class="plan-period">/ forever</span>
+              </div>
+              <span class="plan-sub-price" style="color: var(--carib-green); font-weight: 600;">$0.00 subscription · $0.00 token bill</span>
+              <p class="plan-desc">Sovereign multi-model intelligence with zero subscription, zero per-seat fees, and zero token bills.</p>
+              <button class="plan-action-btn sovereign-btn" onclick="window.closePlansModal()">
+                <span>✓ Current Sovereign Plan</span>
+              </button>
+              <ul class="plan-feature-list sovereign-features">
+                <li><span class="check-icon sovereign-check">✓</span> <strong>>2,800,000,000 Free Monthly Tokens</strong> ($0 bill)</li>
+                <li><span class="check-icon sovereign-check">✓</span> <strong>Frontier Multi-Model Engine</strong>: Gemini 2.5/3.8 Flash, DeepSeek R1 671B Free, Llama 3.3 70B, Qwen 2.5 72B, NVIDIA NIM</li>
+                <li><span class="check-icon sovereign-check">✓</span> <strong>Includes ALL Premium & Enterprise Features</strong>: Carib Code, Carib Cowork, Carib Design, Carib Science</li>
+                <li><span class="check-icon sovereign-check">✓</span> <strong>Remote & Local Connectors</strong>: jarvis-mac-bridge, carib-sovereign-bridge, filesystem, sqlite-memory, github, fetch</li>
+                <li><span class="check-icon sovereign-check">✓</span> <strong>Admin API, Workspaces, Members, Scoped Keys, WIF OIDC Pools</strong></li>
+                <li><span class="check-icon sovereign-check">✓</span> <strong>Local Ollama Hardware Auto-Detection</strong> (localhost:11434)</li>
+                <li><span class="check-icon sovereign-check">✓</span> <strong>1:1 macOS Desktop App UI Parity & Session Persistence</strong></li>
+                <li><span class="check-icon sovereign-check">✓</span> <strong>Zero Model Training & Absolute Sovereign Privacy</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="plans-footnote">
+            Carib Code Sovereign architecture guarantees all tiers, models, and workspaces are 100% free with $0.00 infrastructure cost forever.
+          </div>
+        </div>
+      </div>
+    </dialog>
+    <aside id="claudeArtifactDrawer" class="claude-artifact-drawer" aria-label="Artifact Preview and Code" hidden>
+      <div class="artifact-drawer-header">
+        <div class="artifact-drawer-title-group">
+          <span id="artifactDrawerBadge" class="artifact-type-tag">HTML</span>
+          <div class="artifact-drawer-headings">
+            <h3 id="artifactDrawerTitle" class="artifact-drawer-title">Carib Live Results Track Dashboard</h3>
+            <span id="artifactDrawerMeta" class="artifact-drawer-meta">Carib_Live_Results_Web · 420 lines</span>
+          </div>
+        </div>
+
+        <div class="artifact-drawer-tabs">
+          <button id="artifactTabPreview" class="artifact-drawer-tab active" type="button" onclick="window.switchArtifactDrawerTab('preview')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            Preview
+          </button>
+          <button id="artifactTabCode" class="artifact-drawer-tab" type="button" onclick="window.switchArtifactDrawerTab('code')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Code
+          </button>
+        </div>
+
+        <div class="artifact-drawer-actions">
+          <button id="artifactCopyBtn" class="artifact-icon-btn" type="button" title="Copy code" onclick="window.copyArtifactDrawerCode()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            <span id="artifactCopyLabel">Copy</span>
+          </button>
+          <button id="artifactDownloadBtn" class="artifact-icon-btn" type="button" title="Download artifact" onclick="window.downloadArtifactDrawer()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Download</span>
+          </button>
+          <button id="artifactPopoutBtn" class="artifact-icon-btn" type="button" title="Open in new window" onclick="window.popoutArtifactDrawer()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </button>
+          <button id="artifactCloseBtn" class="artifact-icon-btn close-btn" type="button" title="Close artifact" onclick="window.closeArtifactDrawer()">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div class="artifact-drawer-body">
+        <div id="artifactPreviewContainer" class="artifact-preview-pane">
+          <iframe id="artifactIframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Artifact Live Sandbox"></iframe>
+        </div>
+        <div id="artifactCodeContainer" class="artifact-code-pane" hidden>
+          <div class="code-toolbar">
+            <span id="artifactCodeLanguage" class="code-lang-tag">HTML</span>
+            <span id="artifactCodeLines" class="code-lines-count">420 lines</span>
+          </div>
+          <pre id="artifactCodePre" class="artifact-code-pre"><code id="artifactCodeText"></code></pre>
+        </div>
+      </div>
+    </aside>
+    <div id="artifactDrawerBackdrop" class="artifact-drawer-backdrop" onclick="window.closeArtifactDrawer()" hidden></div>
+
+    <!-- Client-side Scripts -->
+    <script>window.CARIB_VERSION = "__FCC_VERSION__";</script>
+    <script src="/admin/assets/__FCC_VERSION__/session_ui.js?v=20261020_07"></script>
+    <script src="/admin/assets/__FCC_VERSION__/code_sessions.js?v=20261020_07"></script>
+    <script src="/admin/assets/__FCC_VERSION__/claude_suite.js?v=20261020_08"></script>
+  </body>
+</html>

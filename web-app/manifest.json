@@ -1,0 +1,24 @@
+{
+  "name": "Carib Code",
+  "short_name": "CaribCode",
+  "description": "Sovereign AI Engineering & Multi-Model Coding Platform",
+  "start_url": "/new",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1b1a19",
+  "theme_color": "#1b1a19",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/carib-code-logo.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

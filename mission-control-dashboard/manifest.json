@@ -1,0 +1,16 @@
+{
+  "name": "Carib Live Player - Mission Control",
+  "short_name": "CaribControl",
+  "description": "Workstation telemetry, API performance, Omni 8K lines & platform monitor",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0B0F19",
+  "theme_color": "#8B5CF6",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

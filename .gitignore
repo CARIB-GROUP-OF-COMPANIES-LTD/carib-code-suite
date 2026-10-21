@@ -1,0 +1,11 @@
+.env
+.env.*
+secrets.php
+**/config/secrets.php
+*.bak
+*.log
+node_modules/
+vendor/
+build/
+.dart_tool/
+.DS_Store

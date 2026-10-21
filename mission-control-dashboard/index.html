@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carib Live Player — Mission Control & Telemetry</title>
+  <meta name="description" content="Local workstation telemetry, live server performance graphs, and Omni 8K line pool monitor.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <h1 class="brand-title">Carib Live Player</h1>
+        <div class="brand-subtitle">Platform Mission Control & Telemetry</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div id="connectionStatusPill" class="connection-pill">
+        <span class="pulse-dot"></span>
+        <span id="connectionLabel">CHECKING NETWORK...</span>
+      </div>
+      <a href="http://localhost:8090/dashboard.php" target="_blank" class="btn-refresh" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;" title="Open Local Live Staging Server">
+        <span>🚀</span> Local Server (8090)
+      </a>
+      <button id="btnRefresh" class="btn-refresh" onclick="triggerManualRefresh()">
+        <span>⚡</span> Refresh Data
+      </button>
+    </div>
+  </header>
+
+  <!-- Container -->
+  <main class="container">
+
+    <!-- Top Metrics Overview -->
+    <section class="metrics-grid" aria-label="System Metrics">
+      <!-- Live Server -->
+      <article class="metric-card" id="cardServer">
+        <div class="metric-header">
+          <span class="metric-label">Live Server</span>
+          <span class="metric-icon">🌐</span>
+        </div>
+        <div class="metric-value" id="valServerLatency">466 ms</div>
+        <div class="metric-sub">
+          <span id="badgeServerStatus" class="badge-tag badge-emerald">Healthy 200</span>
+          <span>iptv.caribliveagency.info</span>
+        </div>
+      </article>
+
+      <!-- Firebase Realtime -->
+      <article class="metric-card" id="cardFirebase">
+        <div class="metric-header">
+          <span class="metric-label">Firebase Connection</span>
+          <span class="metric-icon">🔥</span>
+        </div>
+        <div class="metric-value" id="valFirebaseProject">caribliveplayer</div>
+        <div class="metric-sub">
+          <span class="badge-tag badge-purple">Active Auth & Messaging</span>
+          <span>Project 351767125943</span>
+        </div>
+      </article>
+
+      <!-- Google Play -->
+      <article class="metric-card" id="cardPlayStore">
+        <div class="metric-header">
+          <span class="metric-label">Google Play Track</span>
+          <span class="metric-icon">📱</span>
+        </div>
+        <div class="metric-value" id="valPlayVersion">v2.0.0 (b3)</div>
+        <div class="metric-sub">
+          <span class="badge-tag badge-cyan">com.carib.liveplayer</span>
+          <span>Internal / Beta / Prod</span>
+        </div>
+      </article>
+
+      <!-- GitHub Suite -->
+      <article class="metric-card" id="cardGitHub">
+        <div class="metric-header">
+          <span class="metric-label">GitHub Repository</span>
+          <span class="metric-icon">🐙</span>
+        </div>
+        <div class="metric-value" id="valGitCommit">6490984</div>
+        <div class="metric-sub">
+          <span class="badge-tag badge-emerald">Branch: main</span>
+          <span>Clean & Synced</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- Analytics & Graphs -->
+    <section class="analytics-row" aria-label="Real-time Performance Graphs">
+      <!-- Latency Timeline Graph -->
+      <article class="chart-card">
+        <div class="card-title-bar">
+          <h2 class="card-title"><span>📈</span> Live Server Latency & Telemetry (ms)</h2>
+          <span class="badge-tag badge-purple">Rolling Real-time Feed</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="latencyCanvas"></canvas>
+        </div>
+      </article>
+
+      <!-- Omni 8K Line Pool Donut Chart -->
+      <article class="chart-card">
+        <div class="card-title-bar">
+          <h2 class="card-title"><span>⚡</span> Omni 8K Line Pool</h2>
+          <span class="badge-tag badge-emerald">Auto-Release Active</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="donutCanvas"></canvas>
+        </div>
+      </article>
+    </section>
+
+    <!-- API Diagnostic Matrix (Click to Test) -->
+    <section aria-label="API Diagnostic Testing">
+      <h2 class="section-title"><span>🔌</span> Interactive API Diagnostics <small style="font-size:0.75rem; color:var(--text-muted); font-weight:400; margin-left:8px;">(Click any card to ping live)</small></h2>
+      <div class="api-grid">
+        <div class="api-card" data-url="https://iptv.caribliveagency.info/api/check-update.php" onclick="testEndpoint(this, 'https://iptv.caribliveagency.info/api/check-update.php')">
+          <div class="api-info">
+            <span class="api-name">check-update.php</span>
+            <span class="api-endpoint">/api/check-update.php</span>
+          </div>
+          <div class="api-meta">
+            <span class="api-latency">466 ms</span>
+            <span class="api-status-badge status-online">200 OK</span>
+          </div>
+        </div>
+
+        <div class="api-card" data-url="https://iptv.caribliveagency.info/index.php" onclick="testEndpoint(this, 'https://iptv.caribliveagency.info/index.php')">
+          <div class="api-info">
+            <span class="api-name">Admin Portal</span>
+            <span class="api-endpoint">/index.php</span>
+          </div>
+          <div class="api-meta">
+            <span class="api-latency">380 ms</span>
+            <span class="api-status-badge status-online">200 OK</span>
+          </div>
+        </div>
+
+        <div class="api-card" data-url="https://iptv.caribliveagency.info/api/heartbeat.php" onclick="testEndpoint(this, 'https://iptv.caribliveagency.info/api/heartbeat.php')">
+          <div class="api-info">
+            <span class="api-name">heartbeat.php</span>
+            <span class="api-endpoint">/api/heartbeat.php (Device Pulse)</span>
+          </div>
+          <div class="api-meta">
+            <span class="api-latency">410 ms</span>
+            <span class="api-status-badge status-online">200 OK</span>
+          </div>
+        </div>
+
+        <div class="api-card" data-url="https://iptv.caribliveagency.info/api/line_release.php" onclick="testEndpoint(this, 'https://iptv.caribliveagency.info/api/line_release.php')">
+          <div class="api-info">
+            <span class="api-name">line_release.php</span>
+            <span class="api-endpoint">/api/line_release.php (Omni 8K Unbind)</span>
+          </div>
+          <div class="api-meta">
+            <span class="api-latency">430 ms</span>
+            <span class="api-status-badge status-online">200 OK</span>
+          </div>
+        </div>
+
+        <div class="api-card" data-url="https://iptv.caribliveagency.info/api/delete-playlist.php" onclick="testEndpoint(this, 'https://iptv.caribliveagency.info/api/delete-playlist.php')">
+          <div class="api-info">
+            <span class="api-name">delete-playlist.php</span>
+            <span class="api-endpoint">/api/delete-playlist.php (Customer Signout)</span>
+          </div>
+          <div class="api-meta">
+            <span class="api-latency">420 ms</span>
+            <span class="api-status-badge status-online">200 OK</span>
+          </div>
+        </div>
+
+        <div class="api-card" data-url="https://iptv.caribliveagency.info/api/omni-action.php" onclick="testEndpoint(this, 'https://iptv.caribliveagency.info/api/omni-action.php')">
+          <div class="api-info">
+            <span class="api-name">omni-action.php</span>
+            <span class="api-endpoint">/api/omni-action.php (Dealer Bridge)</span>
+          </div>
+          <div class="api-meta">
+            <span class="api-latency">445 ms</span>
+            <span class="api-status-badge status-online">200 OK</span>
+          </div>
+        </div>
+
+        <div class="api-card" data-url="https://iptv.caribliveagency.info/web/" onclick="testEndpoint(this, 'https://iptv.caribliveagency.info/web/')">
+          <div class="api-info">
+            <span class="api-name">Web App Player</span>
+            <span class="api-endpoint">/web/ (Browser Streaming)</span>
+          </div>
+          <div class="api-meta">
+            <span class="api-latency">510 ms</span>
+            <span class="api-status-badge status-online">200 OK</span>
+          </div>
+        </div>
+
+        <div class="api-card" data-url="https://iptv.caribliveagency.info/customer_portal.php" onclick="testEndpoint(this, 'https://iptv.caribliveagency.info/customer_portal.php')">
+          <div class="api-info">
+            <span class="api-name">Customer Portal</span>
+            <span class="api-endpoint">/customer_portal.php (Subscribers)</span>
+          </div>
+          <div class="api-meta">
+            <span class="api-latency">395 ms</span>
+            <span class="api-status-badge status-online">200 OK</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platform Distribution Fleet -->
+    <section aria-label="10-Platform Distribution Fleet">
+      <h2 class="section-title"><span>🚀</span> Release Ecosystem Status (10 Targets)</h2>
+      <div class="fleet-grid">
+        <div class="fleet-card">
+          <div class="fleet-icon">🍏</div>
+          <div class="fleet-name">iOS & iPadOS</div>
+          <div class="fleet-status">v2.0.0 (IPA Ready)</div>
+        </div>
+        <div class="fleet-card">
+          <div class="fleet-icon">🤖</div>
+          <div class="fleet-name">Android Mobile</div>
+          <div class="fleet-status">v2.0.0 (AAB + APK)</div>
+        </div>
+        <div class="fleet-card">
+          <div class="fleet-icon">📺</div>
+          <div class="fleet-name">Android TV / Fire TV</div>
+          <div class="fleet-status">Leanback Ready</div>
+        </div>
+        <div class="fleet-card">
+          <div class="fleet-icon">💻</div>
+          <div class="fleet-name">macOS Desktop</div>
+          <div class="fleet-status">Universal Binary</div>
+        </div>
+        <div class="fleet-card">
+          <div class="fleet-icon">🖥️</div>
+          <div class="fleet-name">Samsung Tizen</div>
+          <div class="fleet-status">WGT Package Ready</div>
+        </div>
+        <div class="fleet-card">
+          <div class="fleet-icon">📟</div>
+          <div class="fleet-name">LG webOS</div>
+          <div class="fleet-status">App Bundle Ready</div>
+        </div>
+        <div class="fleet-card">
+          <div class="fleet-icon">📼</div>
+          <div class="fleet-name">Roku TV</div>
+          <div class="fleet-status">BrightScript Package</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Local Model Knowledge Explorer -->
+    <section class="knowledge-section" aria-label="Local Model Knowledge Explorer">
+      <div class="card-title-bar">
+        <h2 class="card-title"><span>🧠</span> Local Model Knowledge Explorer</h2>
+        <span class="badge-tag badge-purple">51 Components Indexed Offline</span>
+      </div>
+      <div class="knowledge-search-bar">
+        <input type="text" id="knowledgeSearchInput" class="search-input" placeholder="Search local knowledge items (e.g. omni, firebase, heartbeat, auth)...">
+      </div>
+      <div id="knowledgeListContainer" class="knowledge-list">
+        <!-- Dynamically rendered by app.js -->
+        <div style="padding: 16px; color: var(--text-muted); text-align: center;">Loading local model knowledge...</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    Carib Live Player 2026 Ecosystem — Telemetry & Mission Control Active on Workstation
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carib Cold · Sign In</title>
+  <link rel="icon" href="/admin/assets/__FCC_VERSION__/carib-cold-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --card-bg: #161922;
+      --card-border: #262a36;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #da7756;
+      --accent-hover: #e0886b;
+      --accent-glow: rgba(218, 119, 86, 0.25);
+      --font-serif: 'Newsreader', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: radial-gradient(circle at 50% 20%, #1c202d 0%, #0d0f14 100%);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .sunburst-icon {
+      width: 36px;
+      height: 36px;
+      color: var(--accent);
+      filter: drop-shadow(0 0 14px var(--accent-glow));
+    }
+
+    .brand-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+
+    .login-card {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .card-heading {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .card-heading h1 {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .card-heading p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 14px;
+      background: #0f121a;
+      border: 1px solid #2d3345;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.99);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 22px 0 16px 0;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--card-border);
+    }
+
+    .divider span {
+      padding: 0 12px;
+    }
+
+    /* Fast Test Account Switchers */
+    .quick-access-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px dashed #334155;
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .quick-access-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .quick-access-title span {
+      font-size: 10px;
+      background: rgba(218, 119, 86, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .account-chips {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .account-chip {
+      background: #1e2433;
+      border: 1px solid #334155;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: #e2e8f0;
+      transition: all 0.2s;
+    }
+
+    .account-chip:hover {
+      background: #283042;
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .account-chip:active {
+      transform: translateY(0);
+    }
+
+    .chip-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .chip-name {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip-desc {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .chip-action {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip-role {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .role-admin { background: rgba(218, 119, 86, 0.2); color: #f97316; }
+    .role-member { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+
+    .btn-quick-go {
+      background: #334155;
+      color: #fff;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: none;
+      font-weight: 600;
+    }
+
+    .account-chip:hover .btn-quick-go {
+      background: var(--accent);
+    }
+
+    .alert-banner {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+
+    .alert-success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      font-size: 11.5px;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .sovereign-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <!-- Brand header with Carib Cold crystalline logo -->
+    <div class="brand-mark">
+      <img src="/admin/assets/__FCC_VERSION__/carib-cold-logo.svg" alt="Carib Cold" style="width: 48px; height: 48px; border-radius: 12px; filter: drop-shadow(0 0 16px rgba(0, 242, 254, 0.45));">
+      <span class="brand-title">Carib Cold</span>
+    </div>
+
+    <!-- Login card -->
+    <div class="login-card">
+      <div class="card-heading">
+        <h1>Welcome to Carib Cold</h1>
+        <p>Sovereign AI Engineering & High-Performance Suite</p>
+      </div>
+
+      <div id="alert-box" class="alert-banner alert-error"></div>
+
+      <div style="margin-bottom: 20px;">
+        <button type="button" onclick="quickLogin('admin')" class="btn-submit" style="background: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);">
+          <span>⚡ Enter as admin@caribgroupofcompanies.ltd (100% Free Sovereign Tier)</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="username">Email or Username</label>
+          <input type="text" id="username" class="input-field" placeholder="admin@caribgroupofcompanies.ltd or developer1" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="input-field" placeholder="••••••••••••" autocomplete="current-password">
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn-submit">
+          <span>Continue with Sovereign Account</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </form>
+
+      <div class="divider"><span>1-Click Test Quick Access</span></div>
+
+      <!-- Quick Test Accounts for Instant Verification (Rule 5 Compliance) -->
+      <div class="quick-access-box">
+        <div class="quick-access-title">
+          <span>⚡ Instant Test Login (Password-Free)</span>
+          <span style="color:#10b981;background:rgba(16,185,129,0.15)">Rule 5 Active</span>
+        </div>
+        <div class="account-chips">
+          <div class="account-chip" onclick="quickLogin('admin')" title="1-Click Login as admin@caribgroupofcompanies.ltd with All 6 Projects">
+            <div class="chip-left">
+              <div class="chip-name">
+                <span>🛡️ admin@caribgroupofcompanies.ltd</span>
+                <span class="chip-role role-admin">Admin</span>
+              </div>
+              <div class="chip-desc">Access to all 6 sovereign projects & full platform controls</div>
+            </div>
+            <div class="chip-action">
+              <button class="btn-quick-go">Enter →</button>
+            </div>
+          </div>
+
+          <div class="account-chip" onclick="quickLogin('developer1')" title="1-Click Login as developer1 with isolated Player Suite project">
+            <div class="chip-left">
+              <div class="chip-name">
+                <span>👤 developer1</span>
+                <span class="chip-role role-member">Member</span>
+              </div>
+              <div class="chip-desc">Isolated access ONLY to carib-live-player-suite</div>
+            </div>
+            <div class="chip-action">
+              <button class="btn-quick-go">Enter →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sovereign-badge">
+      <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span>
+      100% Free Sovereign Tier · $0.00 Active Licensing
+    </div>
+
+    <p class="footer-note">
+      Protected by Sovereign Multi-Tenant Access Control.<br>
+      Strict User Project Isolation & Privacy Enforced.
+    </p>
+  </div>
+
+  <script>
+    // Immediate pre-auth check for returnTo continuity
+    (async function checkExistingAuth() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('reauth') === '1' || urlParams.get('from') === 'logout') {
+          return; // Explicitly logged out or requested reauth - do NOT auto-redirect!
+        }
+        const target = urlParams.get('returnTo') || urlParams.get('redirect') || '/new';
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.ok && data.user && data.authenticated !== false) {
+            window.location.href = target;
+          }
+        }
+      } catch (_) {}
+    })();
+
+    const form = document.getElementById('login-form');
+    const alertBox = document.getElementById('alert-box');
+    const submitBtn = document.getElementById('submit-btn');
+
+    async function executeLogin(username, password) {
+      alertBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.7';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password: password || '' })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          throw new Error(data.detail || 'Invalid username or password');
+        }
+
+        // Store active user details in localStorage
+        localStorage.setItem('fcc_user', JSON.stringify(data.user));
+
+        alertBox.className = 'alert-banner alert-success';
+        alertBox.textContent = `Welcome, ${data.user.full_name || 'Admin'}! Redirecting to workspace...`;
+        alertBox.style.display = 'block';
+
+        // Redirect to intended page or /new
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get('returnTo') || urlParams.get('redirect') || '/new';
+        setTimeout(() => {
+          window.location.href = redirect;
+        }, 300);
+      } catch (err) {
+        alertBox.className = 'alert-banner alert-error';
+        alertBox.textContent = err.message;
+        alertBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+      }
+    }
+
+    // Quick login fills credentials and signs in automatically (Rule 5 friction-free access)
+    async function quickLogin(role) {
+      const u = role === 'admin' ? 'admin@caribgroupofcompanies.ltd' : 'developer1';
+      document.getElementById('username').value = u;
+      document.getElementById('password').value = '';
+      await executeLogin(u, '');
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      await executeLogin(username, password);
+    });
+  </script>
+</body>
+</html>

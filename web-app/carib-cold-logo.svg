@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#0f2b48" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#070c14" stop-opacity="1"/>
+    </radialGradient>
+
+    <!-- Frost Border Gradient -->
+    <linearGradient id="frostBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#00f2fe" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <!-- Main Crystal Cyan Gradient -->
+    <linearGradient id="crystalGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0f2fe"/>
+      <stop offset="30%" stop-color="#38bdf8"/>
+      <stop offset="70%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+
+    <!-- Bright Neon Frost Gradient -->
+    <linearGradient id="crystalGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="50%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#f0f9ff"/>
+    </linearGradient>
+
+    <!-- Facet Shadow Gradient -->
+    <linearGradient id="facetShadow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0369a1" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#0c4a6e" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="iceGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="coreGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Base Obsidian Shield -->
+  <rect x="16" y="16" width="480" height="480" rx="108" fill="url(#bgGlow)" stroke="url(#frostBorder)" stroke-width="4"/>
+
+  <!-- Radial Ice Mist Behind Emblem -->
+  <circle cx="240" cy="256" r="160" fill="#00f2fe" opacity="0.12" filter="url(#coreGlow)"/>
+
+  <!-- Crystalline "C" Main Monogram Structure -->
+  <g filter="url(#iceGlow)">
+    <!-- Top Arc Facets -->
+    <polygon points="256,76 348,76 396,124 336,184 276,148 220,148" fill="url(#crystalGrad2)"/>
+    <polygon points="348,76 396,124 336,184 310,148" fill="url(#facetShadow)" opacity="0.6"/>
+
+    <!-- Top Corner Facet to Upper Spine -->
+    <polygon points="220,148 276,148 240,210 176,188" fill="url(#crystalGrad1)"/>
+    <polygon points="176,188 240,210 196,256 148,256" fill="url(#crystalGrad2)"/>
+
+    <!-- Upper Left Arc Outer Crest -->
+    <polygon points="256,76 220,148 176,188 128,140 180,90" fill="#f0f9ff" opacity="0.95"/>
+    <polygon points="128,140 176,188 148,256 96,256 96,190" fill="url(#crystalGrad1)"/>
+
+    <!-- Lower Left Arc Outer Crest & Spine -->
+    <polygon points="96,256 148,256 196,256 176,324 128,372 96,322" fill="url(#crystalGrad2)"/>
+    <polygon points="148,256 196,256 240,302 176,324" fill="url(#facetShadow)" opacity="0.7"/>
+
+    <!-- Bottom Corner to Lower Arc -->
+    <polygon points="176,324 240,302 276,364 220,364" fill="url(#crystalGrad1)"/>
+    <polygon points="220,364 276,364 336,328 396,388 348,436 256,436" fill="url(#crystalGrad2)"/>
+    <polygon points="336,328 396,388 348,436 310,364" fill="url(#facetShadow)" opacity="0.6"/>
+    <polygon points="128,372 176,324 220,364 256,436 180,422" fill="#38bdf8" opacity="0.9"/>
+  </g>
+
+  <!-- Prismatic Crystal Facet Lines (Shimmer Edges) -->
+  <g stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.75">
+    <line x1="256" y1="76" x2="220" y2="148"/>
+    <line x1="220" y1="148" x2="276" y2="148"/>
+    <line x1="276" y1="148" x2="336" y2="184"/>
+    <line x1="176" y1="188" x2="240" y2="210"/>
+    <line x1="148" y1="256" x2="196" y2="256"/>
+    <line x1="176" y1="324" x2="240" y2="302"/>
+    <line x1="220" y1="364" x2="276" y2="364"/>
+    <line x1="276" y1="364" x2="336" y2="328"/>
+  </g>
+
+  <!-- Central Frost Star / Ice Prism Spark inside the opening of the C -->
+  <g transform="translate(360, 256)" filter="url(#coreGlow)">
+    <!-- 4-pointed radiant ice diamond star -->
+    <path d="M0 -54 Q0 -8 44 0 Q0 8 0 54 Q0 8 -44 0 Q0 -8 0 -54 Z" fill="#ffffff"/>
+    <path d="M0 -34 Q0 -5 28 0 Q0 5 0 34 Q0 5 -28 0 Q0 -5 0 -34 Z" fill="#00f2fe"/>
+    <circle cx="0" cy="0" r="7" fill="#ffffff"/>
+    <!-- Diagonal mini-sparkles -->
+    <line x1="-18" y1="-18" x2="18" y2="18" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-18" y1="18" x2="18" y2="-18" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Micro Frost Flares -->
+  <circle cx="180" cy="90" r="4" fill="#ffffff" filter="url(#iceGlow)"/>
+  <circle cx="396" cy="124" r="3.5" fill="#38bdf8" filter="url(#iceGlow)"/>
+  <circle cx="396" cy="388" r="3.5" fill="#38bdf8" filter="url(#iceGlow)"/>
+  <circle cx="180" cy="422" r="4" fill="#ffffff" filter="url(#iceGlow)"/>
+</svg>
